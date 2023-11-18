@@ -11,7 +11,7 @@
 <div class="row">
 
     <div class="col-sm-12">
-        <a href="#">Create</a>
+        <a href="{{route('create')}}">Create</a>
         <table class=table table-bordered table-hover dataTable dtr-inline">
             <th>Nama Produk</th>
             <th>Deskripsi</th>
