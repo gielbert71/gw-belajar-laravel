@@ -1,7 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HelloController;
+use App\Http\Controllers\ProfileController;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,12 +15,25 @@ use App\Http\Controllers\HelloController;
 |
 */
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
-route::get('/', [HelloController::class,'Index']);
+Route::get('/', function () {
+    return view('welcome');
+});
+
+// Route::get('/dashboard', function () {
+    // return view('dashboard');
+// })->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    route::get('/', [HelloController::class,'Index'])->name('index');
+    route::get('/dashboard', function () {return view('dashboard');})->name('dashboard');
+});
+
+require __DIR__.'/auth.php';
 route::get('/hello', [HelloController::class,'HelloWorld']);
-route::get('/crud', [HelloController::class,'products']);
+route::get('/crud', [HelloController::class,'products'])->name('crud');
 route::get('/create', [HelloController::class,'showCreate'])->name('create');
 route::post('/buat', [HelloController::class,'create'])->name('buat');
 route::get('{id}/edit', [HelloController::class,'edit'])->name('edit');
