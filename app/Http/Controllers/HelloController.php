@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Products;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class HelloController extends Controller
 {
@@ -30,13 +31,27 @@ class HelloController extends Controller
 
     public function create(Request $request)
     {
-        $request->validate([
-            'product_name' => 'required|string|max:255',
+
+        $validator = Validator::make($request->all(),[
+            'product_name' => 'required|string|min:1|max:255',
             'category_id' => 'required',
-            'product_code' => 'required',
-            'description' => 'required',
-            'price' => 'required',
+            'product_code' => 'required|string|min:4|max:5',
+            'description' => 'required|string|min:10',
+            'price' => 'required|numeric',
         ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+        
+
+        // $request->validate([
+        //     'product_name' => 'required|string|max:255',
+        //     'category_id' => 'required',
+        //     'product_code' => 'required|string|min:4|max|5',
+        //     'description' => 'required|string|min:10',
+        //     'price' => 'required',
+        // ]);
 
         $product_name = $request->input('product_name');
         $category_id = $request->input('category_id');
@@ -62,13 +77,19 @@ class HelloController extends Controller
 
     public function update(Request $request, $id)
     {
-        $request->validate([
-            'product_name' => 'required|string|max:255',
+        $validator = Validator::make($request->all(),[
+            'product_name' => 'required|string|min:1|max:255',
             'category_id' => 'required',
-            'product_code' => 'required',
-            'description' => 'required',
-            'price' => 'required',
+            'product_code' => 'required|string|min:4|max:5',
+            'description' => 'required|string|min:10',
+            'price' => 'required|numeric',
         ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+        // $request->validate([
+        // ]);
         $products = Products::find($id);
 
         $products->update([
