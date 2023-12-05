@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\DB;
 class Product extends Model
 {
     use HasFactory;
-    protected $table ='products';
+    protected $table = 'products';
     public $product_name;
     public $category_id;
     public $product_code;
@@ -26,12 +26,16 @@ class Product extends Model
 
     public function buatProduk()
     {
-        DB::insert('insert into products (product_name,category_id,product_code,description,price) values (:product_name, :category_id, :product_code, :description, :price)',[
+        DB::insert('insert into products (product_name,category_id,product_code,description,price) values (:product_name, :category_id, :product_code, :description, :price)', [
             'product_name' => $this->product_name,
-            'category_id'=>$this->category_id,
-            'product_code'=>$this->product_code,
-            'description'=>$this->description,
-            'price'=>$this->price
+            'category_id' => $this->category_id,
+            'product_code' => $this->product_code,
+            'description' => $this->description,
+            'price' => $this->price
         ]);
+    }
+    public function category()
+    {
+        return $this->belongsTo(ProductsCategory::class, 'category_id');
     }
 }

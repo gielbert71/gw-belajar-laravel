@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\HelloController;
+use App\Http\Controllers\HighchartController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -39,3 +40,4 @@ route::post('/buat', [HelloController::class,'create'])->name('buat');
 route::get('{id}/edit', [HelloController::class,'edit'])->name('edit');
 route::put('{id}/update', [HelloController::class,'update'])->name('update');
 route::delete('{id}/delete', [HelloController::class,'delete'])->name('delete');
+route::get('/chart',[HighchartController::class,'handleChart'])->name('chart');
