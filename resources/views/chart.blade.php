@@ -66,11 +66,12 @@ Highchart
     <br>
     <div id="pieContainer"></div>
     <br>
-    <div id="categoryTotalContainer"></div>
+    <div id="chart-containerr"></div>
 </center>
-<script src="https://code.highcharts.com/highcharts.js"></script>
+<!-- <script src="https://code.highcharts.com/highcharts.js"></script> -->
 <script src="https://code.highcharts.com/modules/exporting.js"></script>
 <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+<script src="{{asset('Highcharts-11.2.0/code/highcharts.src.js') }}"></script>
 <script>
     var categories = <?php echo json_encode($categories->pluck('category_name')) ?>;
     var productCounts = <?php echo json_encode($categories->pluck('products_count')) ?>;
@@ -130,55 +131,43 @@ Highchart
     });
 </script>
 <script>
-    var categories = <?php echo json_encode($categoryData->pluck('category_name')); ?>;
-    var categoryData = <?php echo json_encode($categoryData->pluck('products')->map(function($products) {
-        return $products->map(function($product) {
-            return [
-                'total_price' => $product->total_price,
-                'total_stock' => $product->total_stock,
-            ];
-        });
-    })); ?>;
+    var categories = <?php echo json_encode(array_keys($categoryPrices)); ?>;
+    var totalPrices = <?php echo json_encode(array_values($categoryPrices)); ?>;
 
     console.log('Categories:', categories);
-    console.log('Category Data:', categoryData);
+    console.log('Total Prices:', totalPrices);
 
-    Highcharts.chart('categoryTotalContainer', {
-        chart: {
-            type: 'column'
-        },
-        title: {
-            text: 'Jumlah harga dan stock per kategori'
-        },
-        xAxis: {
-            categories: categories
-        },
-        yAxis: [{
-            title: {
-                text: 'Harga'
-            },
-        }, {
-            title: {
-                text: 'Stock'
-            },
-            opposite: true,
-        }],
-        series: [{
-            name: 'Harga',
-            data: categoryData.map(function(category) {
-                return category.reduce(function(sum, product) {
-                    return sum + product.total_price;
-                }, 0);
-            })
-        }, {
-            name: 'Stock',
-            data: categoryData.map(function(category) {
-                return category.reduce(function(sum, product) {
-                    return sum + product.total_stock;
-                }, 0);
-            })
-        }]
+    document.addEventListener('DOMContentLoaded', function () {
+        console.log('Document is ready.');
+
+        try {
+            Highcharts.chart('chart-containerr', {
+                chart: {
+                    type: 'column'
+                },
+                title: {
+                    text: 'Total Price per Category'
+                },
+                xAxis: {
+                    categories: categories
+                },
+                yAxis: {
+                    title: {
+                        text: 'Total Price'
+                    }
+                },
+                series: [{
+                    name: 'Total Price',
+                    data: totalPrices
+                }]
+            });
+            console.log('Chart successfully rendered.');
+        } catch (error) {
+            console.error('Error rendering chart:', error);
+        }
     });
 </script>
+
+
 
 @endsection
