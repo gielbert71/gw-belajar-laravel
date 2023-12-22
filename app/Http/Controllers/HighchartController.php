@@ -18,23 +18,34 @@ class HighchartController extends Controller
         $namecategory = DB::table('products_categories')->pluck('category_name');
         $kategori = ProductsCategory::all();
         $produk = Product::all();
-        $totalharga1 = Product::where('category_id', 1)->sum('price');
-        $totalharga2 = Product::where('category_id', 2)->sum('price');
-        $totalharga3 = Product::where('category_id', 3)->sum('price');
-        $categoryPrices = [
-            'Category 1' => $totalharga1,
-            'Category 2' => $totalharga2,
-            'Category 3' => $totalharga3,
-        ];
+        // Fetch all categories from the product_categories table
+        $pcategories = ProductsCategory::all();
+
+        // Initialize an array to store category prices
+        $categoryPrices = [];
+        
+        // Loop through each category
+        foreach ($pcategories as $category) {
+            $categoryId = $category->id;
+            $totalharga = Product::where('category_id', $categoryId)->sum('price');
+            $categoryPrices["Category $categoryId"] = $totalharga;
+        }
+        
+        //loop category stocks
+        $categoryStock = [];
+        foreach ($pcategories as $category) {
+            $categoryId = $category->id;
+            $totalstok = Product::where('category_id', $categoryId)->sum('stock');
+            $categoryStock["Category $categoryId"] = $totalstok;
+        }
 
         $categories = ProductsCategory::withCount('products')->get(['id', 'category_name', 'products_count']);
 
 
 
-        
+
 
         // dd($categoryPrices);
-        return view('chart', compact('categoryPrices', 'categories', 'totalCategories', 'totalProducts', 'totalPrice', 'totalStock', 'namecategory', 'kategori', 'produk'));
+        return view('chart', compact('categoryPrices', 'categories', 'totalCategories', 'totalProducts', 'totalPrice', 'totalStock', 'namecategory', 'kategori', 'produk', 'categoryStock'));
     }
-
 }

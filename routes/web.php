@@ -32,12 +32,21 @@ Route::middleware('auth')->group(function () {
     route::get('/dashboard', function () {return view('dashboard');})->name('dashboard');
 });
 
+Route::middleware('checkrole:admin,superadmin')->group(function () {
+    // Routes accessible only to admin or superadmin
+    route::get('/create', [HelloController::class,'showCreate'])->name('create');
+    route::post('/buat', [HelloController::class,'create'])->name('buat');
+    route::get('{id}/edit', [HelloController::class,'edit'])->name('edit');
+    route::put('{id}/update', [HelloController::class,'update'])->name('update');
+
+    // Middleware for superadmin only
+    route::middleware('checkrole:superadmin')->group(function(){
+        route::delete('{id}/delete', [HelloController::class,'delete'])->name('delete');
+    });
+});
+
 require __DIR__.'/auth.php';
 route::get('/hello', [HelloController::class,'HelloWorld']);
 route::get('/crud', [HelloController::class,'products'])->name('crud');
-route::get('/create', [HelloController::class,'showCreate'])->name('create');
-route::post('/buat', [HelloController::class,'create'])->name('buat');
-route::get('{id}/edit', [HelloController::class,'edit'])->name('edit');
-route::put('{id}/update', [HelloController::class,'update'])->name('update');
-route::delete('{id}/delete', [HelloController::class,'delete'])->name('delete');
 route::get('/chart',[HighchartController::class,'handleChart'])->name('chart');
+route::get('/supremacy', function() {return view('motor');})->name('motor');

@@ -11,6 +11,11 @@
       <li class="nav-item d-none d-sm-inline-block">
         <a href="#" class="nav-link">Contact</a>
       </li>
+      @hasanyrole('admin|superadmin')
+      <li class="nav-item d-none d-sm-inline-block">
+        <a href="{{route('create')}}" class="btn btn-primary">Create</a>
+        @endhasanyrole
+      </li>
     </ul>
 
     <!-- Right navbar links -->

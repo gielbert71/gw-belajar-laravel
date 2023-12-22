@@ -1,7 +1,9 @@
 @extends('template.main')
 @section('content')
 <div class="card card-primary">
-    <div class="card-header"><h3>Edit</h3></div>
+    <div class="card-header">
+        <h3>Edit</h3>
+    </div>
     <form action="{{ route('update', $products->id) }}" method="post">
         @csrf
         @method('PUT')
@@ -13,9 +15,11 @@
             <div class="form-group">
                 <label for="category_id">Kategori Produk</label>
                 <select name="category_id" id="category_id" class="form-control">
-                    <option value="1" {{ $products->category_id == 1 ? 'selected' : '' }}>1</option>
-                    <option value="2" {{ $products->category_id == 2 ? 'selected' : '' }}>2</option>
-                    <option value="3" {{ $products->category_id == 3 ? 'selected' : '' }}>3</option>
+                    @foreach($categories as $id => $categoryName)
+                    <option value="{{ $id }}" {{ $products->category_id == $id ? 'selected' : '' }}>
+                        {{ $categoryName }}
+                    </option>
+                    @endforeach
                 </select>
             </div>
             <div class="form-group">
@@ -30,9 +34,14 @@
                 <label for="price">Harga</label>
                 <input type="text" class="form-control" id="price" name="price" placeholder="Harga" value="{{ $products->price }}">
             </div>
+            <div class="form-group">
+                <label for="stock">Stok</label>
+                <input type="text" class="form-control" id="stock" name="stock" placeholder="Stok" value="{{$products->stock}}">
+            </div>
         </div>
         <div class="card-footer">
             <button class="btn btn-primary" type="submit">Submit</button>
+            <a href="{{ url()->previous() }}" class="btn btn-primary">Back</a>
         </div>
     </form>
 </div>

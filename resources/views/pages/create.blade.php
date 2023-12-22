@@ -4,7 +4,7 @@
     <div class="card-header">
         <h3>Create</h3>
     </div>
-    <form action="{{route('buat')}}" method="post">
+    <form action="{{route('buat')}}" method="post" enctype="multipart/form-data">
         @csrf
         <div class="card-body">
             <div class="form-group">
@@ -14,9 +14,9 @@
             <div class="form-group">
                 <label for="category_id">Kategori Produk</label>
                 <select name="category_id" id="category_id" class="form-control">
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
+                    @foreach($categories as $id => $categoryName)
+                    <option value="{{ $id }}">{{ $categoryName }}</option>
+                    @endforeach
                 </select>
             </div>
             <div class="form-group">
@@ -30,6 +30,17 @@
             <div class="form-group">
                 <label for="price">Harga</label>
                 <input type="text" class="form-control" id="price" name="price" placeholder="Harga">
+            </div>
+            <div class="form-group">
+                <label for="stock">Stok</label>
+                <input type="text" class="form-control" id="stock" name="stock" placeholder="Stok">
+            </div>
+            <div class="form-group">
+                <label for="image">Upload File Cover Kategori</label>
+                <input class="form-control" type="file" name="image" id="image">
+                @error('file_cover')
+                <div class="alert alert-danger mt-1 mb-1">{{ $message }}</div>
+                @enderror
             </div>
         </div>
         <div class="card-footer">

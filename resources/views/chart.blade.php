@@ -67,14 +67,20 @@ Highchart
     <div id="pieContainer"></div>
     <br>
     <div id="chart-containerr"></div>
+    <br>
+    <div id="chart-containers"></div>
 </center>
-<!-- <script src="https://code.highcharts.com/highcharts.js"></script> -->
+<script src="https://code.highcharts.com/highcharts.js"></script>
 <script src="https://code.highcharts.com/modules/exporting.js"></script>
 <script src="https://code.highcharts.com/modules/accessibility.js"></script>
 <script src="{{asset('Highcharts-11.2.0/code/highcharts.src.js') }}"></script>
 <script>
     var categories = <?php echo json_encode($categories->pluck('category_name')) ?>;
     var productCounts = <?php echo json_encode($categories->pluck('products_count')) ?>;
+
+    productCounts = productCounts.map(function(value) {
+        return parseFloat(value);
+    });
 
     Highcharts.chart('ccontainer', {
         chart: {
@@ -101,6 +107,9 @@ Highchart
 <script>
     var categories = <?php echo json_encode($categories->pluck('category_name')) ?>;
     var productCounts = <?php echo json_encode($categories->pluck('products_count')) ?>;
+    productCounts = productCounts.map(function(value) {
+        return parseFloat(value);
+    });
 
     Highcharts.chart('pieContainer', {
         chart: {
@@ -131,13 +140,15 @@ Highchart
     });
 </script>
 <script>
-    var categories = <?php echo json_encode(array_keys($categoryPrices)); ?>;
+    var categories = <?php echo json_encode($categories->pluck('category_name')) ?>;
     var totalPrices = <?php echo json_encode(array_values($categoryPrices)); ?>;
 
-    console.log('Categories:', categories);
-    console.log('Total Prices:', totalPrices);
+    // Convert totalPrices values to numbers
+    totalPrices = totalPrices.map(function(value) {
+        return parseFloat(value);
+    });
 
-    document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', function() {
         console.log('Document is ready.');
 
         try {
@@ -146,19 +157,64 @@ Highchart
                     type: 'column'
                 },
                 title: {
-                    text: 'Total Price per Category'
+                    text: 'Jumlah Harga per Kategori'
                 },
                 xAxis: {
                     categories: categories
                 },
                 yAxis: {
                     title: {
-                        text: 'Total Price'
+                        text: 'Jumlah Harga'
                     }
                 },
                 series: [{
-                    name: 'Total Price',
+                    name: 'Jumlah Harga per Kategori',
                     data: totalPrices
+                }]
+            });
+            console.log('Chart successfully rendered.');
+        } catch (error) {
+            console.error('Error rendering chart:', error);
+        }
+    });
+</script>
+
+<script>
+    var categories = <?php echo json_encode($categories->pluck('category_name')) ?>;
+    var totalStocks = <?php echo json_encode(array_values($categoryStock)); ?>;
+
+    // Convert totalPrices values to numbers
+    totalStocks = totalStocks.map(function(value) {
+        return parseFloat(value);
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('Document is ready.');
+
+        try {
+            Highcharts.chart('chart-containers', {
+                chart: {
+                    type: 'pie'
+                },
+                title: {
+                    text: 'Jumlah Stock per Kategori'
+                },
+                xAxis: {
+                    categories: categories
+                },
+                yAxis: {
+                    title: {
+                        text: 'Jumlah Stock'
+                    }
+                },
+                series: [{
+                    name: 'Jumlah sotck',
+                    data: categories.map(function(category, index) {
+                        return {
+                            name: category,
+                            y: totalStocks[index]
+                        };
+                    })
                 }]
             });
             console.log('Chart successfully rendered.');
