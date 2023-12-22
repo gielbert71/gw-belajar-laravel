@@ -83,10 +83,13 @@ Products
                         <div class="col-sm-12" style="display:flex; justify-content: center; align-items:center">
                             <div style="box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);max-width: 300px; margin: auto; text-align: center; font-family: arial;">
                                 <img src="{{asset('cover/'.$prod->image)}}" alt="{{$prod->image}}" style="height:100%; width:100%;">
-                                <h1>{{$prod->product_name}}</h1>
+                                
+                                <div style="width: full; background-color: greenyellow; margin-top: 10px;">
+                                    <h1 style="font-size:large; font-weight:700">{{$prod->product_name}}</h1>
+                                </div>
                                 <p>Rp.{{ number_format($prod->price, 0, ',', '.') }}</p>
                                 <p>{{$prod->description}}</p>
-                                <p></p>
+                                
                             </div>
                         </div>
                     </div>
