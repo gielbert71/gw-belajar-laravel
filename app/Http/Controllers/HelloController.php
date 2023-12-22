@@ -80,6 +80,8 @@ class HelloController extends Controller
             'product_code' => 'required|string|min:4|max:5',
             'description' => 'required|string|min:10',
             'price' => 'required|numeric',
+            'stock' => 'required|numeric',
+            'image' => 'nullable|file|image|mimes:jpeg,png,jpg',
         ]);
 
         if ($validator->fails()) {
@@ -88,6 +90,19 @@ class HelloController extends Controller
         // $request->validate([
         // ]);
         $products = Products::find($id);
+        $category = ProductsCategory::findOrFail($id);
+
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+            $file_name = time() . "_" . $file->getClientOriginalName();
+            $destination = 'cover';
+            $file->move($destination, $file_name);
+    
+            // Remove old image if needed
+            // Storage::delete($destination . '/' . $category->image);
+    
+            $category->image = $file_name;
+        }
 
         $products->update([
             'product_name' => $request->input('product_name'),
@@ -95,6 +110,8 @@ class HelloController extends Controller
             'product_code' => $request->input('product_code'),
             'description' => $request->input('description'),
             'price' => $request->input('price'),
+            'stock' => $request->input('stock'),
+            'image' => $request->input('image')
         ]);
         return redirect()->back()->with('success');
     }

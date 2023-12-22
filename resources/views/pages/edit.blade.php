@@ -38,6 +38,18 @@
                 <label for="stock">Stok</label>
                 <input type="text" class="form-control" id="stock" name="stock" placeholder="Stok" value="{{$products->stock}}">
             </div>
+            <div class="form-group">
+                <label for="image">Upload File Cover Kategori</label>
+                <input class="form-control" type="file" name="image" id="image" value="{{ old('image', $products->image) }}">
+                @error('image')
+                <div class="alert alert-danger mt-1 mb-1">{{ $message }}</div>
+                @enderror
+
+                @if ($products->image)
+                <p>Current Image:</p>
+                <img src="{{ asset('cover/' . $products->image) }}" alt="Current Image" style="max-width: 200px;">
+                @endif
+            </div>
         </div>
         <div class="card-footer">
             <button class="btn btn-primary" type="submit">Submit</button>

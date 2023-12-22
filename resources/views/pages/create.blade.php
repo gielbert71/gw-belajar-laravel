@@ -45,6 +45,7 @@
         </div>
         <div class="card-footer">
             <button class="btn btn-primary" type="submit">Submit</button>
+            <a href="{{ url()->previous() }}" class="btn btn-primary">Back</a>
         </div>
     </form>
 </div>

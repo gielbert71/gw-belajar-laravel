@@ -208,7 +208,7 @@ Highchart
                     }
                 },
                 series: [{
-                    name: 'Jumlah sotck',
+                    name: 'Jumlah Stock',
                     data: categories.map(function(category, index) {
                         return {
                             name: category,

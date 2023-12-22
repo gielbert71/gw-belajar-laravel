@@ -57,7 +57,7 @@ Products
                                 <td>{{$prod->product_name}}</td>
                                 <td><img src="{{asset('cover/'.$prod->image)}}" alt="{{$prod->image}}" style="width:150px;"></td>
                                 <td>{{$prod->description}}</td>
-                                <td>{{$prod->price}}</td>
+                                <td>Rp. {{ number_format($prod->price, 0, ',', '.') }},00</td>
                                 <td>{{$prod->stock}}</td>
                                 <td>
                                     <a href="{{route('edit',$prod->id)}}" class="btn btn-primary" style="display: inline; margin-top: 10px; padding: 5px 18px;">Edit</a>
